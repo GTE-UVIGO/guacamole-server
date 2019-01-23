@@ -112,10 +112,16 @@ RUN ${PREFIX_DIR}/bin/link-freerdp-plugins.sh \
 # Expose the default listener port
 EXPOSE 4822
 
+ARG USER
+ARG UID
+RUN useradd -u $UID $USER
+RUN usermod -aG sudo $USER
+
 # Start guacd, listening on port 0.0.0.0:4822
 #
 # Note the path here MUST correspond to the value specified in the 
 # PREFIX_DIR build argument.
 #
+USER $USER:$USER
 CMD /usr/local/guacamole/sbin/guacd -b 0.0.0.0 -L $GUACD_LOG_LEVEL -f
 
